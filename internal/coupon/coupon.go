@@ -94,7 +94,9 @@ func mulBps(amount int64, bps int) int64 {
 	if amount <= 0 || bps <= 0 {
 		return 0
 	}
-	return (amount * int64(bps)) / 10000
+	// half-up：先加除数的一半（5000）再整除，使余数 >= 5000 时进位。
+	// 例如 1001*8000=8008000，截断得 800；加 5000 得 8013000，整除得 801。
+	return (amount*int64(bps) + 5000) / 10000
 }
 
 // scopeLabel 把作用域标签转成可读文字用于错误信息。
